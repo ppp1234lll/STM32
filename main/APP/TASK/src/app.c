@@ -60,7 +60,8 @@ typedef struct
 		uint8_t relay_reset[8];	
 
     uint8_t net_reload_id[8];		// 网络设备重启
-    uint8_t net_reload_time[8];	// 网络设备重启计时	
+    uint8_t net_reload_num[8];	// 网络设备重启次数	
+		uint8_t net_reload_times[8];	// 网络设备重启次数	
 	} sys_flag;
 	struct
 	{
@@ -1159,6 +1160,27 @@ void app_set_net_operate_relay_id(uint8_t num)
 }
 /************************************************************
 *
+* Function name	: app_set_net_reload_num
+* Description	: 根据网络重启设置继电器重启
+* Parameter		: 
+* Return		: 
+*	
+************************************************************/
+void app_set_net_reload_num(uint8_t num)
+{
+	if(sg_sysoperate_t.sys_flag.net_reload_num[num] == 0)
+	{
+		if(sg_sysparam_t.threshold.net_reload > 0)
+		{
+			sg_sysoperate_t.sys_flag.net_reload_num[num] = sg_sysparam_t.threshold.net_reload;
+			sg_sysoperate_t.sys_flag.net_reload_times[num] = 60;	
+		}
+		else
+			sg_sysoperate_t.sys_flag.net_reload_times[num] = 0;
+	}
+}
+/************************************************************
+*
 * Function name	: app_sys_net_operate_relay
 * Description	: 根据网络重启设置继电器重启
 * Parameter		: 
@@ -1171,6 +1193,14 @@ void app_sys_net_operate_relay(void)
 		
 	for(uint8_t i=0;i<8;i++)
 	{
+//		if(sg_sysoperate_t.sys_flag.net_reload_num[i] > 0)  // 重启次数
+//		{
+//			
+//		}
+//		else	
+//		{
+//		
+//		}
 		if(sg_sysoperate_t.sys_flag.net_reload_id[i] == 1)
 		{
 			if(sg_sysparam_t.threshold.net_retime == 0)
@@ -1188,12 +1218,40 @@ void app_sys_net_operate_relay(void)
 			if(relay_time[i] == 0)
 			{		
 				relay_control((RELAY_DEV)i,RELAY_ON);
-				sg_sysoperate_t.sys_flag.net_reload_id[i]	= 0;			
+				sg_sysoperate_t.sys_flag.net_reload_id[i]	= 0;	
+        sg_sysoperate_t.sys_flag.net_reload_num[i] = 60;				
 			}
 		}	
 	}
 }
-
+/************************************************************
+*
+* Function name	: app_sys_net_relay_reload_num_times
+* Description	: 重启次数计时
+* Parameter		: 
+* Return		: 
+*	
+************************************************************/
+void app_sys_net_relay_reload_num_times(void)
+{
+	for(uint8_t i=0;i<8;i++)
+	{
+		if(sg_sysoperate_t.sys_flag.net_reload_num[i] > 0)  // 时间计数
+		{
+			sg_sysoperate_t.sys_flag.net_reload_num[i]--;
+			if(sg_sysoperate_t.sys_flag.net_reload_num[i] == 0)
+			{
+				if(sg_sysoperate_t.sys_flag.net_reload_num[i] > 0)
+				{
+					sg_sysoperate_t.sys_flag.net_reload_num[i]--;
+					sg_sysoperate_t.sys_flag.net_reload_id[i] = 1;
+				}
+				else
+					sg_sysoperate_t.sys_flag.net_reload_num[i] = 0;
+			}
+		}
+	}
+}
 /***********************************************************************************
 					参数的配置与获取
 ***********************************************************************************/

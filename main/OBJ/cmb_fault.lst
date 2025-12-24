@@ -77,10 +77,11 @@ ARM Macro Assembler    Page 2
    46 0000000C         
    47 0000000C                 END
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp.sp --apcs=
-interwork --depend=.\objects\cmb_fault.d -o.\objects\cmb_fault.o -ID:\Keil_v5\L
-ocal\Arm\Packs\Keil\STM32F4xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32F4xx\Inclu
-de --predefine="__UVISION_VERSION SETA 536" --predefine="STM32F407xx SETA 1" --
-list=..\obj\cmb_fault.lst ..\SEGGER\CmBacktrace\fault_handler\keil\cmb_fault.S
+interwork --depend=.\objects\cmb_fault.d -o.\objects\cmb_fault.o -IC:\Keil_v5\A
+rms\Packs\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include -
+IC:\Keil_v5\ARM\CMSIS\Include --predefine="__UVISION_VERSION SETA 536" --predef
+ine="STM32F407xx SETA 1" --list=..\obj\cmb_fault.lst ..\SEGGER\CmBacktrace\faul
+t_handler\keil\cmb_fault.S
 
 
 

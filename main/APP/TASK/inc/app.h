@@ -253,4 +253,8 @@ uint8_t app_get_ln_status(void);
 uint8_t app_get_pe_status(void);
 void app_set_net_operate_relay_id(uint8_t num);
 
+void app_sys_net_relay_reload_num_times(void);
+void app_set_net_reload_num(uint8_t num);
+
+
 #endif
