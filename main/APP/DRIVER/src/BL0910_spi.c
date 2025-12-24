@@ -196,33 +196,33 @@ int8_t bl0910_deal_read_data_function(void)
 	switch(sg_bl0910data_t.reg) 
 	{
 		case BL0910_V_RMS: 	   det_set_total_energy_bl0910(0,data); break;
-		case BL0910_I9_RMS:    det_set_total_energy_bl0910(1,data); break;
-		case BL0910_I8_RMS:    det_set_total_energy_bl0910(2,data); break;
-		case BL0910_I7_RMS:    det_set_total_energy_bl0910(3,data); break;
-		case BL0910_I6_RMS:    det_set_total_energy_bl0910(4,data); break;
+		case BL0910_I1_RMS:    det_set_total_energy_bl0910(1,data); break;
+		case BL0910_I2_RMS:    det_set_total_energy_bl0910(2,data); break;
+		case BL0910_I3_RMS:    det_set_total_energy_bl0910(3,data); break;
+		case BL0910_I4_RMS:    det_set_total_energy_bl0910(4,data); break;
 		case BL0910_I5_RMS:    det_set_total_energy_bl0910(5,data); break;
+		case BL0910_I6_RMS:    det_set_total_energy_bl0910(6,data); break;
+		case BL0910_I7_RMS:    det_set_total_energy_bl0910(7,data); break;
+		case BL0910_I8_RMS:    det_set_total_energy_bl0910(8,data); break;
+		case BL0910_I9_RMS:    det_set_total_energy_bl0910(9,data); break;
+		case BL0910_WATT1_AP:  det_set_total_energy_bl0910(18,Complement_2_Original(data));	break;		
+		case BL0910_WATT2_AP:  det_set_total_energy_bl0910(10,Complement_2_Original(data)); break;		
+		case BL0910_WATT3_AP:  det_set_total_energy_bl0910(11,Complement_2_Original(data));	break;	
+		case BL0910_WATT4_AP:  det_set_total_energy_bl0910(12,Complement_2_Original(data));	break;		
 		case BL0910_WATT5_AP:  det_set_total_energy_bl0910(13,Complement_2_Original(data));	break;
-		case BL0910_WATT6_AP:  det_set_total_energy_bl0910(12,Complement_2_Original(data));	break;
-		case BL0910_WATT7_AP:  det_set_total_energy_bl0910(11,Complement_2_Original(data)); break;
-		case BL0910_WATT8_AP:  det_set_total_energy_bl0910(10,Complement_2_Original(data));	break;
-		case BL0910_WATT9_AP:  det_set_total_energy_bl0910(18,Complement_2_Original(data));	break;
-		case BL0910_CF9_CNT:   det_set_total_energy_bl0910(27,data); break;
-		case BL0910_CF8_CNT: 	 det_set_total_energy_bl0910(19,data); break;
-		case BL0910_CF7_CNT:   det_set_total_energy_bl0910(20,data); break;
-		case BL0910_CF6_CNT:   det_set_total_energy_bl0910(21,data); break;
+		case BL0910_WATT6_AP:  det_set_total_energy_bl0910(14,Complement_2_Original(data));	break;
+		case BL0910_WATT7_AP:  det_set_total_energy_bl0910(15,Complement_2_Original(data)); break;
+		case BL0910_WATT8_AP:  det_set_total_energy_bl0910(16,Complement_2_Original(data));	break;
+		case BL0910_WATT9_AP:  det_set_total_energy_bl0910(17,Complement_2_Original(data));	break;
+		case BL0910_CF1_CNT:   det_set_total_energy_bl0910(27,data); break;
+		case BL0910_CF2_CNT:   det_set_total_energy_bl0910(19,data); break;
+		case BL0910_CF3_CNT:   det_set_total_energy_bl0910(20,data); break;
+		case BL0910_CF4_CNT: 	 det_set_total_energy_bl0910(21,data); break;		
 		case BL0910_CF5_CNT:   det_set_total_energy_bl0910(22,data); break;
-		case BL0910_I4_RMS:    det_set_total_energy_bl0910(6,data); break;
-		case BL0910_I3_RMS:    det_set_total_energy_bl0910(7,data); break;
-		case BL0910_I2_RMS:    det_set_total_energy_bl0910(8,data); break;
-		case BL0910_I1_RMS:    det_set_total_energy_bl0910(9,data); break;
-		case BL0910_WATT4_AP:  det_set_total_energy_bl0910(14,Complement_2_Original(data));	break;
-		case BL0910_WATT3_AP:  det_set_total_energy_bl0910(15,Complement_2_Original(data));	break;
-		case BL0910_WATT2_AP:  det_set_total_energy_bl0910(16,Complement_2_Original(data)); break;
-		case BL0910_WATT1_AP:  det_set_total_energy_bl0910(17,Complement_2_Original(data));	break;
-		case BL0910_CF4_CNT: 	 det_set_total_energy_bl0910(23,data); break;
-		case BL0910_CF3_CNT:   det_set_total_energy_bl0910(24,data); break;
-		case BL0910_CF2_CNT:   det_set_total_energy_bl0910(25,data); break;
-		case BL0910_CF1_CNT:   det_set_total_energy_bl0910(26,data); break;
+		case BL0910_CF6_CNT:   det_set_total_energy_bl0910(23,data); break;
+		case BL0910_CF7_CNT:   det_set_total_energy_bl0910(24,data); break;
+		case BL0910_CF8_CNT: 	 det_set_total_energy_bl0910(25,data); break;
+		case BL0910_CF9_CNT:   det_set_total_energy_bl0910(26,data); break;
 		default:			break;
 	}
 	return ret;
@@ -364,38 +364,35 @@ void bl0910_send_data_function(void)
 		{
 			switch(sg_bl0910data_t.flag)
 			{
-				case 1: 	bl0910_read_reg_function(BL0910_I5_RMS,0); break; // 电流 4
-				case 2: 	bl0910_read_reg_function(BL0910_I6_RMS,0); break; // 电流 3
-				case 3: 	bl0910_read_reg_function(BL0910_I7_RMS,0); break; // 电流 2
-				case 4: 	
-					bl0910_read_reg_function(BL0910_I8_RMS,0); 
-				break; // 电流 1
-				case 5: 	
-					bl0910_read_reg_function(BL0910_I9_RMS,0); 
-				break; // 总电流
-				case 6: 	bl0910_read_reg_function(BL0910_V_RMS,0); break;  // 电压
-				case 7: 	bl0910_read_reg_function(BL0910_WATT5_AP,0); break; // 功率 4
-				case 8: 	bl0910_read_reg_function(BL0910_WATT6_AP,0); break; // 功率 3
-				case 9: 	bl0910_read_reg_function(BL0910_WATT7_AP,0); break; // 功率 2
-				case 10: 	bl0910_read_reg_function(BL0910_WATT8_AP,0); break; // 功率 1
-				case 11: 	bl0910_read_reg_function(BL0910_WATT9_AP,0); break; // 总功率				
-				case 12: 	bl0910_read_reg_function(BL0910_CF5_CNT,0); break; // 功率 4
-				case 13: 	bl0910_read_reg_function(BL0910_CF6_CNT,0); break; // 功率 3
-				case 14: 	bl0910_read_reg_function(BL0910_CF7_CNT,0); break; // 功率 2
-				case 15: 	bl0910_read_reg_function(BL0910_CF8_CNT,0); break; // 功率 1
-				case 16: 	bl0910_read_reg_function(BL0910_CF9_CNT,0); break; // 总有功脉冲	
-				case 17: 	bl0910_read_reg_function(BL0910_I4_RMS,0); break; // 电流 4
-				case 18: 	bl0910_read_reg_function(BL0910_I3_RMS,0); break; // 电流 3
-				case 19: 	bl0910_read_reg_function(BL0910_I2_RMS,0); break; // 电流 2
-				case 20: 	bl0910_read_reg_function(BL0910_I1_RMS,0); break; // 电流 1
-				case 21: 	bl0910_read_reg_function(BL0910_WATT4_AP,0); break; // 功率 4
-				case 22: 	bl0910_read_reg_function(BL0910_WATT3_AP,0); break; // 功率 3
-				case 23: 	bl0910_read_reg_function(BL0910_WATT2_AP,0); break; // 功率 2
-				case 24: 	bl0910_read_reg_function(BL0910_WATT1_AP,0); break; // 功率 1
-				case 25: 	bl0910_read_reg_function(BL0910_CF4_CNT,0); break; // 功率 4
-				case 26: 	bl0910_read_reg_function(BL0910_CF3_CNT,0); break; // 功率 3
-				case 27: 	bl0910_read_reg_function(BL0910_CF2_CNT,0); break; // 功率 2
-				case 28: 	bl0910_read_reg_function(BL0910_CF1_CNT,0); break; // 功率 1				
+				case 1: 	bl0910_read_reg_function(BL0910_V_RMS,0);  break; // 电压
+				case 2: 	bl0910_read_reg_function(BL0910_I1_RMS,0); break; // 电流 1
+				case 3: 	bl0910_read_reg_function(BL0910_I2_RMS,0); break; // 电流 2
+				case 4: 	bl0910_read_reg_function(BL0910_I3_RMS,0); break; // 电流 3
+				case 5: 	bl0910_read_reg_function(BL0910_I4_RMS,0); break; // 电流 4
+				case 6: 	bl0910_read_reg_function(BL0910_I5_RMS,0); break; // 电流 4
+				case 7: 	bl0910_read_reg_function(BL0910_I6_RMS,0); break; // 电流 3
+				case 8: 	bl0910_read_reg_function(BL0910_I7_RMS,0); break; // 电流 2
+				case 9: 	bl0910_read_reg_function(BL0910_I8_RMS,0); break; // 电流 1
+				case 10: 	bl0910_read_reg_function(BL0910_I9_RMS,0); break; // 总电流
+				case 11: 	bl0910_read_reg_function(BL0910_WATT1_AP,0); break; // 功率 1	
+				case 12: 	bl0910_read_reg_function(BL0910_WATT2_AP,0); break; // 功率 2
+				case 13: 	bl0910_read_reg_function(BL0910_WATT3_AP,0); break; // 功率 3			
+				case 14: 	bl0910_read_reg_function(BL0910_WATT4_AP,0); break; // 功率 4
+				case 15: 	bl0910_read_reg_function(BL0910_WATT5_AP,0); break; // 功率 4
+				case 16: 	bl0910_read_reg_function(BL0910_WATT6_AP,0); break; // 功率 3
+				case 17: 	bl0910_read_reg_function(BL0910_WATT7_AP,0); break; // 功率 2
+				case 18: 	bl0910_read_reg_function(BL0910_WATT8_AP,0); break; // 功率 1
+				case 19: 	bl0910_read_reg_function(BL0910_WATT9_AP,0); break; // 总功率		
+				case 20: 	bl0910_read_reg_function(BL0910_CF1_CNT,0); break; // 功率 1	
+				case 21: 	bl0910_read_reg_function(BL0910_CF2_CNT,0); break; // 功率 2
+				case 22: 	bl0910_read_reg_function(BL0910_CF3_CNT,0); break; // 功率 3
+				case 23: 	bl0910_read_reg_function(BL0910_CF4_CNT,0); break; // 功率 4	
+				case 24: 	bl0910_read_reg_function(BL0910_CF5_CNT,0); break; // 功率 4
+				case 25: 	bl0910_read_reg_function(BL0910_CF6_CNT,0); break; // 功率 3
+				case 26: 	bl0910_read_reg_function(BL0910_CF7_CNT,0); break; // 功率 2
+				case 27: 	bl0910_read_reg_function(BL0910_CF8_CNT,0); break; // 功率 1
+				case 28: 	bl0910_read_reg_function(BL0910_CF9_CNT,0); break; // 总有功脉冲	
+				
 				default: break;			
 			}
 			sg_bl0910data_t.flag--;

@@ -221,7 +221,7 @@ void TIM3_IRQHandler(void)
 		device_reboot_timer_function();
 		bl0910_run_timer_function();
 		com_queue_time_function();
-		bl0942_run_timer_function();
+		bl0939_run_timer_function();
 	}
 	TIM_ClearITPendingBit(TIM3,TIM_IT_Update);  //清除中断标志位
 

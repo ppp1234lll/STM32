@@ -249,7 +249,24 @@ void ebtn_APP_Event(struct ebtn_btn *btn, ebtn_evt_t evt)
 				{
 						det_set_key_value(AC_LN_K10,KEY_NONE);
 				}
-        break;				
+        break;	
+
+        /* ----------------------------------- KEY11 ---------------------------------- */
+    case LIGHT_K11:
+				if (evt == EBTN_EVT_KEEPALIVE)
+        {
+            /* ------------------------------- 长按计数到达指定值时 ------------------------------- */
+            if (btn->keepalive_cnt == 1)
+            {
+							det_set_key_value(LIGHT_K11,KEY_EVNT);
+							if(KEY_DEBUG)  printf("LIGHT_K11 long\n");
+            }
+        }
+				else if (evt == EBTN_EVT_ONRELEASE)// 按键 释放处理
+				{
+						det_set_key_value(LIGHT_K11,KEY_NONE);
+				}
+        break;							
     }
 }
 

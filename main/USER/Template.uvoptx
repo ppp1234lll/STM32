@@ -200,6 +200,11 @@
           <WinNumber>1</WinNumber>
           <ItemText>sg_bl0910_buff</ItemText>
         </Ww>
+        <Ww>
+          <count>9</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>sg_bl0939_buff</ItemText>
+        </Ww>
       </WatchWindow1>
       <WatchWindow2>
         <Ww>

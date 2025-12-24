@@ -32,6 +32,7 @@
         市电火-地：           PA3
         市电零-地：           PA4
         市电零火线：          PA5
+				光敏电阻输入：        PC0
 */
 #define RESET_K1_PIN              GPIO_Pin_2                 
 #define RESET_K1_GPIO_PORT        GPIOD                      
@@ -72,7 +73,10 @@
 #define AC_LN_K10_PIN            GPIO_Pin_5                 
 #define AC_LN_K10_GPIO_PORT      GPIOA                      
 #define AC_LN_K10_GPIO_CLK       RCC_AHB1Periph_GPIOA
-
+																 
+#define LIGHT_K11_PIN            GPIO_Pin_0                 
+#define LIGHT_K11_GPIO_PORT      GPIOC                     
+#define LIGHT_K11_GPIO_CLK       RCC_AHB1Periph_GPIOC
 /** ***************************************************************************
  * @brief 定义默认按键参数结构体
  * @ref ebtn_APP_Keys.h
@@ -102,7 +106,7 @@ ebtn_btn_param_t buttons_parameters = EBTN_PARAMS_INIT(
                                   PWR_K3_GPIO_CLK  | WATER_K4_GPIO_CLK | \
 																	INT1_K5_GPIO_CLK | INT2_K6_GPIO_CLK  | \
 																	INT3_K7_GPIO_CLK | AC_LP_K8_GPIO_CLK | \
-																	AC_NP_K9_GPIO_CLK| AC_LN_K10_GPIO_CLK
+																	AC_NP_K9_GPIO_CLK| AC_LN_K10_GPIO_CLK|LIGHT_K11_GPIO_CLK
 																	
 key_config_t keys_config_list[] = {
     // 示例：四个按键
@@ -117,7 +121,7 @@ key_config_t keys_config_list[] = {
     {AC_LP_K8,  AC_LP_K8_GPIO_PORT,  AC_LP_K8_PIN,  EBTN_ACTIVE_HIGH}, // 市电火-地  PB1， 高电平触发
     {AC_NP_K9,  AC_NP_K9_GPIO_PORT,  AC_NP_K9_PIN,  EBTN_ACTIVE_LOW},  // 市电零-地  PC4， 低电平触发
     {AC_LN_K10, AC_LN_K10_GPIO_PORT, AC_LN_K10_PIN, EBTN_ACTIVE_HIGH}, // 市电零火线 PC5， 高电平触发
-
+    {LIGHT_K11, LIGHT_K11_GPIO_PORT, LIGHT_K11_PIN, EBTN_ACTIVE_HIGH}, // 市电零火线 PC5， 高电平触发
 };
 
 /* --------------------------------- 此处修改组合键配置 -------------------------------- */

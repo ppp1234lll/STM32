@@ -19,7 +19,7 @@ void det_task_function(void)
 		det_get_temphumi_function(); 		 // 获取温湿度
 		det_get_attitude_state_value();  // 获取姿态数据
 		bl0910_work_process_function();	 // 数据获取函数
-		bl0942_work_process_function();
+		bl0939_work_process_function();
 		det_get_gps_value();             // 获取GPS数据
 		det_get_lux_function();          // 获取光照度
 		IWDG_Feed();			 		           // 喂狗			
@@ -74,7 +74,11 @@ void det_get_key_status_function(void)
 		sg_datacollec_t.key_evnt[INT3_K7] = 2;	
 	else 
 		sg_datacollec_t.key_evnt[INT3_K7] = 1;	
-	
+
+	if(sg_datacollec_t.key_s[LIGHT_K11] == KEY_EVNT)	 // 光敏
+		sg_datacollec_t.key_evnt[LIGHT_K11] = 2;	
+	else 
+		sg_datacollec_t.key_evnt[LIGHT_K11] = 1;		
 }
 
 /*
@@ -538,8 +542,27 @@ void det_set_total_energy_bl0942(uint8_t num,float data)
 {
 	switch(num)
 	{
-		case 0: sg_datacollec_t.QF_front_vin220v = data / BL0942_VOLT_KP;   break;
-		case 1: sg_datacollec_t.residual_c       = data / BL0942_CURR_KP ; 	break;
+//		case 0: sg_datacollec_t.QF_front_vin220v = data / BL0942_VOLT_KP;   break;
+//		case 1: sg_datacollec_t.residual_c       = data / BL0942_CURR_KP ; 	break;
+  }
+}
+
+/*
+*********************************************************************************************************
+*	函 数 名: det_set_total_energy_bl0939
+*	功能说明: 计算BL0939电量参数
+*	形    参: 
+*	@num		: 通道
+*	@data		: 数据
+*	返 回 值: 无
+*********************************************************************************************************
+*/
+void det_set_total_energy_bl0939(uint8_t num,float data)
+{
+	switch(num)
+	{
+		case 0: sg_datacollec_t.QF_front_vin220v = data / BL0939_VOLT_KP;   break;
+		case 1: sg_datacollec_t.residual_c       = data / BL0939_CURR_KP ; 	break;
   }
 }
 
@@ -607,6 +630,19 @@ uint8_t det_get_water_status(void)
 }
 /*
 *********************************************************************************************************
+*	函 数 名: det_get_light_status
+*	功能说明: 获取光敏状态
+*	形    参: 无
+*	返 回 值: 无
+*********************************************************************************************************
+*/
+uint8_t det_get_light_status(void)
+{
+	return sg_datacollec_t.key_evnt[LIGHT_K11];
+}
+
+/*
+*********************************************************************************************************
 *	函 数 名: det_get_collect_data
 *	功能说明: 获取数据信息
 *	形    参: 无
@@ -654,7 +690,7 @@ void det_set_key_value(uint8_t key_id,uint8_t key_value)
 */
 void det_get_lux_function(void)
 {
-	sg_datacollec_t.lux = BH1750_ReadI2C_Data(BH1750_Addr);      //读出数据
+//	sg_datacollec_t.lux = BH1750_ReadI2C_Data(BH1750_Addr);      //读出数据
 }
 /*
 *********************************************************************************************************

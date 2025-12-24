@@ -16,7 +16,7 @@ void start_system_init_function(void)
 	cJSON_Hooks hook;                // 初始化JSON 
 
 	IWDG_Init(4,1000);               // 初始化看门狗(硬件、软件2s)
-	start_get_device_id_function();					// 获取本机ID
+	start_get_device_id_function();  // 获取本机ID
 	mymem_init(SRAMIN);              // 内存初始化
 	
 	hook.malloc_fn = mymalloc_sramin;// 内存分配
@@ -25,11 +25,11 @@ void start_system_init_function(void)
 	
 	bsp_InitLed();                   // LED初始化（已测试）
 	bsp_InitRelay();				         // 继电器初始化（未测试）	
+	bsp_InitKey();
 	ebtn_APP_Keys_Init();            // 初始化按键模块（已测试）
 	bsp_InitFan();                   // 风扇初始化(已测试)	
 	bsp_InitRTC();								   // RTC初始化 (已测试)
-	bsp_InitRNG();                   // 硬件随机数初始化(已测试)
-	bsp_InitRS485(115200); 
+	bsp_InitRS485(115200); 	
 	bsp_InitUart_GPS(9600);
 
 	IWDG_Feed();
@@ -39,12 +39,9 @@ void start_system_init_function(void)
 
 	hal_lis3dh_init(true);           // 陀螺仪初始化 IIC (已测试)
 	aht20_init_function();					 // 温湿度初始化(已测试)	
-	BH1750_Init();                   // 光照度初始化(已测试)	
-
+//	BH1750_Init();                   // 光照度初始化(已测试)	
 	bl0910_init_function();						// 电能检测初始化(已测试)
-	bl0942_init_function();           // 电能检测初始化(失败)
-//HSPI2_test();
-//  bl0942_test();
+	bl0939_init_function();           // 电能检测初始化(失败)
 	IWDG_Feed();
 	W25QXX_Init();			 					 // 初始化spiflash
 

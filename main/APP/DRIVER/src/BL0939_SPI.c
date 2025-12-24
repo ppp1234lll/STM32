@@ -65,8 +65,6 @@ static uint16_t sg_bl0939_rec_sta = 0;
 static uint8_t  sg_bl0939_buff[16] = {0};
 struct bl0939_data_t sg_bl0939data_t = {0};
 
-float ld_current;
-
 
 /* 接口与参数 */
 #define bl0939_INIT() 							bsp_InitSPI2()
@@ -74,9 +72,9 @@ float ld_current;
 #define bl0939_ReadByte(data)       SPI2_ReadWriteByte(data)
 
 /* 宏定义数据 */
-#define bl0939_DET_NUM   			4  		  // 采集次数 
+#define bl0939_DET_NUM   			2  		  // 采集次数 
 #define bl0939_TIME_OUT  			200 		// 超时时间 200ms
-#define bl0939_AUTO_TIME   		2000 	  // 2s (采集18次，每次100ms)
+#define bl0939_AUTO_TIME   		1000 	  // 2s (采集18次，每次100ms)
 #define bl0939_SEND_TIME   		100 	  // 发送时间 100ms
 /* 数据 */
 #define bl0939_REC_STA  sg_bl0939_rec_sta
@@ -195,10 +193,10 @@ int8_t bl0939_deal_read_data_function(void)
 	{
 		case BL0939_V_RMS: 	 det_set_total_energy_bl0939(0,data); break;
 		case BL0939_IA_RMS:  det_set_total_energy_bl0939(1,data); break;
-		case BL0939_IB_RMS:  det_set_total_energy_bl0939(2,data); break;
+//		case BL0939_IB_RMS:  det_set_total_energy_bl0939(2,data); break;
 //		case BL0939_A_WATT:  det_set_total_energy_bl0939(3,Complement_3_Original(data));	break;
 //		case BL0939_B_WATT:  det_set_total_energy_bl0939(4,Complement_3_Original(data));	break;
-		case BL0939_CFA_CNT: det_set_total_energy_bl0939(5,data); break;
+//		case BL0939_CFA_CNT: det_set_total_energy_bl0939(5,data); break;
 //		case BL0939_CFB_CNT: det_set_total_energy_bl0939(6,data); break;
 		default:			break;
 	}
@@ -349,12 +347,10 @@ void bl0939_send_data_function(void)
 //			printf("read\n");
 			switch(sg_bl0939data_t.flag)
 			{	
-				case 1: 	
-					bl0939_read_reg_function(BL0939_IA_RMS,0); 
-				break; // 电流 A
-				case 2: 	bl0939_read_reg_function(BL0939_IB_RMS,0); break; // 电流 B
-				case 3: 	bl0939_read_reg_function(BL0939_V_RMS,0); break;  // 电压
-				case 4: 	bl0939_read_reg_function(BL0939_A_WATT,0); break; // 功率 A
+				case 1: 	bl0939_read_reg_function(BL0939_V_RMS,0); break;  // 电压
+				case 2: 	bl0939_read_reg_function(BL0939_IA_RMS,0);break; // 电流 A
+//				case 3: 	bl0939_read_reg_function(BL0939_IB_RMS,0); break; // 电流 B
+//				case 4: 	bl0939_read_reg_function(BL0939_A_WATT,0); break; // 功率 A
 //				case 5: 	bl0939_read_reg_function(BL0939_B_WATT,0); break; // 功率 B			
 //				case 6: 	bl0939_read_reg_function(BL0939_CFA_CNT,0); break; // 总有功脉冲	A	
 //				case 7: 	bl0939_read_reg_function(BL0939_CFB_CNT,0); break; // 总有功脉冲	B	

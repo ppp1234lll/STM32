@@ -33,9 +33,9 @@ extern "C"
 #define DEBOUNCE_TIME               20  // 防抖：按下防抖超时
 #define RELEASE_DEBOUNCE_TIME       20  // 防抖：松开防抖超时
 #define CLICK_AND_PRESS_MIN_TIME    20  // 触发最短时间（小于该值不触发 Click/Press）
-#define CLICK_AND_PRESS_MAX_TIME    200 // 短按最长时间（超过则触发 Press；0xFFFF=不检查最大值）
+#define CLICK_AND_PRESS_MAX_TIME    100 // 短按最长时间（超过则触发 Press；0xFFFF=不检查最大值）
 #define MULTI_CLICK_MAX_TIME        500   // 连击间隔超时（两个按键之间的最大间隔）
-#define KEEPALIVE_TIME_PERIOD       1500  // 长按周期（每周期增加 keepalive_cnt）
+#define KEEPALIVE_TIME_PERIOD       1000  // 长按周期（每周期增加 keepalive_cnt）
 #define MAX_CLICK_COUNT             6     // 最大连续短击次数（0=不检查连击）
 
 /* -------------------------------- 此处修改按键ID定义 -------------------------------- */
@@ -57,7 +57,7 @@ typedef enum
 		AC_LP_K8,
 		AC_NP_K9,
 		AC_LN_K10,
-
+		LIGHT_K11,
 		// 更多按键......
 		KEYS_COUNT // 最大按键，用于提供按键数量
 } key_enum_t;

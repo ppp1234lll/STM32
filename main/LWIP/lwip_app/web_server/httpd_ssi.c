@@ -2,45 +2,23 @@
 #include "lwip/debug.h"
 #include "httpd.h"
 #include "lwip/tcp.h"
-#include "fs.h"
-#include "lwip_comm.h"
-#include "det.h"
 #include "bsp.h"
-#include "app.h"
-#include "start.h"
-#include "eth.h"
 #include "appconfig.h"
-#include "gsm.h"
-#include "includes.h"
-#include "GPRS.h"
-#include "stdio.h"
-#include "string.h"
-#include <stdlib.h>
-#include "update.h"
 
 const char cg_ssi_open[]   = {0xe5,0xbc,0x80,0x00};				  // 开启
 const char cg_ssi_close[]  = {0xe5,0x85,0xb3,0x00};				  // 关闭
 const char cg_ssi_normal[] = {0xe6,0xad,0xa3,0xe5,0xb8,0xb8,0x00}; // 正常
 const char cg_ssi_error[]  = {0xe6,0x95,0x85,0xe9,0x9a,0x9c,0x00}; // 故障
 
-const char sim_ssi_none[]  = {0xE4,0xB8,0x8D,0xE6,0xA3,0x80,0xE6,0xB5,0x8B,0x00}; // 不检测
-const char sim_ssi_error[]  = {0xE5,0xB7,0xB2,0xE6,0x8B,0x94,0xE5,0x87,0xBA,0x00}; // 已拔出
-const char sim_ssi_ok[]  = {0xE5,0xB7,0xB2,0xE6,0x8F,0x92,0xE5,0x85,0xA5,0x00}; // 已插入
-
 const char spd_ssi_none[]  = {0xE4,0xB8,0x8D,0xE6,0xA3,0x80,0xE6,0xB5,0x8B,0x00}; // 不检测
 const char spd_ssi_error[]  = {0xE5,0xB7,0xB2,0xE5,0xA4,0xB1,0xE6,0x95,0x88,0x00}; // 已失效
 const char spd_ssi_ok[]  = {0xe6,0xad,0xa3,0xe5,0xb8,0xb8,0x00}; // 正常
 
-const char bat_ssi_none[]  = {0xE4,0xB8,0x8D,0xE6,0xA3,0x80,0xE6,0xB5,0x8B,0x00}; // 不检测
-const char bat_ssi_error[]  = {	0xE5,0xB7,0xB2,0xE5,0x9D,0x8F,0xE6,0x88,0x96,0xE5,
-																0xBC,0x80,0xE5,0x85,0xB3,0xE6,0x9C,0xAA,0xE6,0x89,
-																0x93,0xE5,0xBC,0x80,0x00}; // 已坏或开关未打开
-const char bat_ssi_low[]  = {0xE7,0x94,0xB5,0xE9,0x87,0x8F,0xE4,0xBD,0x8E,0x00}; // 电量低
-const char bat_ssi_ok[]  = {0xe6,0xad,0xa3,0xe5,0xb8,0xb8,0x00}; // 正常
-
 const char water_ssi_none[]  = {0xE4,0xB8,0x8D,0xE6,0xA3,0x80,0xE6,0xB5,0x8B,0x00}; // 不检测
 const char water_ssi_error[] = {0xe6,0xbc,0x8f,0xe6,0xb0,0xb4,0x00}; // 漏水
 const char water_ssi_ok[]    = {0xe6,0xad,0xa3,0xe5,0xb8,0xb8,0x00}; // 正常
+
+
 
 /************************************************************
 *
@@ -322,15 +300,13 @@ void httpd_ssi_other_data_collection_function(char *pcInsert)
 	open_door_status_Handler(new_buff[1]);				// 箱门状态
 	
 	spd_status_Handler(new_buff1[0]);
-	bat_status_Handler(new_buff1[1]);
-	sim_status_Handler(new_buff1[2]);
-	water_status_Handler(new_buff1[3]);
+	water_status_Handler(new_buff1[1]);
 	
-	Miu_Handler (new_buff1[4],4);
+	Miu_Handler (new_buff1[2],4);
 	
-	sprintf(pcInsert,"[\"%s%s\",\"%s%%\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"]",
+	sprintf(pcInsert,"[\"%s%s\",\"%s%%\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"]",
 			buff[0],unit,buff[1],new_buff[0],new_buff[1],new_buff1[0],\
-			new_buff1[1],new_buff1[2],new_buff1[3],new_buff1[4]);
+			new_buff1[1],new_buff1[2],new_buff1[3]);
 }
 
 /************************************************************
@@ -364,6 +340,38 @@ void httpd_ssi_threshold_seting_function(char *pcInsert)
 										buff[0],buff[1],buff[2],buff[3],buff[4],buff[5],buff[6],buff[7],times[0],buff[8]);
 
 }
+/************************************************************
+*
+* Function name	: httpd_ssi_threshold_seting_function
+* Description	: 阈值信息更新
+* Parameter		: 
+* Return		: 
+*	  20230720
+************************************************************/
+void httpd_ssi_bd_data_collection_function(char *pcInsert)
+{
+	char buff[6][16] = {0};
+	atgm336h_data_t *param = atgm336h_get_gnss_data();	
+	float    temp    = 0;
+	uint32_t data[2] = {0};
+	
+	temp = param->altitude;
+	data[0] = (uint16_t)temp;
+	temp	= temp - data[0];  
+	data[1] = temp*100;
+	sprintf(buff[2],"%d.%02d",data[0],data[1]);		
+	
+	sprintf(buff[0],"%d",param->num_satellites);
+	sprintf(buff[1],"%d",param->num_satellites);
+	sprintf(buff[2],"%.2f",param->altitude);
+	sprintf(buff[3],"%f",param->latitude);
+	sprintf(buff[4],"%f",param->longitude);
+	sprintf(buff[5],"%d",param->fix_status);
+	
+	sprintf(pcInsert,"[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"]",
+										buff[0],buff[1],buff[2],buff[3],buff[4],buff[5]);
+}
+
 /************************************************************
 *
 * Function name	: Switch_status_Handler

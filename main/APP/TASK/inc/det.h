@@ -30,8 +30,6 @@ typedef struct
 	
 	double attitude_acc; 	// 加速度
 
-	uint16_t lux;        // 光照度
-	
 	float vin220v;		 // 220V电压检测
 	float current[8]; 		// 电流检测
 	float total_current; 	// 总电流检测
@@ -39,8 +37,8 @@ typedef struct
 	float power[8]; 			// 功率
 	electricity_t kwh;    // 用电量
 	
-	uint8_t key_s[10];    // 按键数量定义
-	uint8_t key_evnt[10];    // 按键事件
+	uint8_t key_s[11];    // 按键数量定义
+	uint8_t key_evnt[11];    // 按键事件
 	
 	float   QF_front_vin220v; // 空气开关前端220V电压检测
 	uint8_t residual_c;    // 剩余电流
@@ -74,10 +72,11 @@ void det_set_main_network_sub_status(uint8_t status);		// 设置主网络状态 - 2
 void det_set_total_energy_bl0910(uint8_t num,float data);			// 设置电量参数
 void det_set_total_energy_bl0942(uint8_t num,float data);
 
+void det_set_total_energy_bl0939(uint8_t num,float data);
 void det_set_ping_status(uint8_t status);
 void det_set_spd_status(uint8_t mode);   //  设置防雷开关状态
 void det_set_water_status(uint8_t mode);
-
+uint8_t det_get_light_status(void);
 
 uint8_t det_get_open_door(void);							// 获取箱门状态
 uint16_t det_get_cabinet_posture(void);						// 获取箱体姿态

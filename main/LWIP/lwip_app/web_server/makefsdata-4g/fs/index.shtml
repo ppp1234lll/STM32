@@ -114,12 +114,12 @@
             .from {
                 display: flex;
                 margin: 20px 0;
-                width: auto;
+                width: 300px;
 
             }
 
             .from span{
-               min-width: 80px;
+               min-width: 100px;
                text-align: left;
             }
             input,select {
@@ -222,7 +222,7 @@
                 ],
             },
             {
-                label:"其他数据",
+                label:"传感器数据",
                 btntype:"otherCollection",
                 divid:"content",
                 nodes:[
@@ -231,10 +231,9 @@
                     ["箱体姿态","",'pose'],
                     ["箱门状态","",'door'],
 					["防雷器状态","",'spd'],
-					["电池状态","",'bat'],
-					["SIM卡状态","",'sim'],
+					["光敏","",'light'],
 					["水浸状态","",'water'],
-                                                                                ["漏电","",'ld'],
+                    ["漏电","",'ld'],
                 ],
             },
             {
@@ -301,54 +300,7 @@
                     ["方向","<!--#bd_dir-->",'bd_dir'],
                 ],
             },
-           {
-                label:"交换机端口POE状态",
-                btntype:"POEStatus",
-                divid:"content",
-                nodes:[
-                    ["端口1","",'poe1',{
-                        type:"switch",
-                    }],
-                    ["端口2","",'poe2',{
-                        type:"switch",
-                    }],
-					["端口3","",'poe3',{
-                        type:"switch",
-                    }],
-					["端口4","",'poe4',{
-                        type:"switch",
-                    }],
-					["端口5","",'poe5',{
-                        type:"switch",
-                    }],
-					["端口6","",'poe6',{
-                        type:"switch",
-                    }],
-					["端口7","",'poe7',{
-                        type:"switch",
-                    }],
-					["端口8","",'poe8',{
-                        type:"switch",
-                    }],
-                ],
-            },
-            {
-                label:"交换机端口状态",
-                btntype:"portStatus",
-                divid:"content",
-                nodes:[
-                    ["端口1", "", "port1", {type:"switch"}, "port1_up", "port1_down"],
-                    ["端口2", "", "port2", {type:"switch"}, "port2_up", "port2_down"],
-                    ["端口3", "", "port3", {type:"switch"}, "port3_up", "port3_down"],
-                    ["端口4", "", "port4", {type:"switch"}, "port4_up", "port4_down"],
-                    ["端口5", "", "port5", {type:"switch"}, "port5_up", "port5_down"],
-                    ["端口6", "", "port6", {type:"switch"}, "port6_up", "port6_down"],
-                    ["端口7", "", "port7", {type:"switch"}, "port7_up", "port7_down"],
-                    ["端口8", "", "port8", {type:"switch"}, "port8_up", "port8_down"],
-                    ["端口9", "", "port9", {type:"switch"}, "port9_up", "port9_down"],
-                    ["端口10", "", "port10", {type:"switch"}, "port10_up", "port10_down"]
-                ],
-            },
+
             {
                 label:"系统状态",
                 divid:"content",
@@ -375,7 +327,7 @@
                     }],
                     ['摄像机检测方式','','camera_tran',{
                         type:"select",
-                        options:["PING方式","ONVIF搜索","端口扫描","RTSP拉流测试"],
+                        options:["PING方式","端口扫描","RTSP拉流测试"],
                     }],
                 ],
                 btns:[
@@ -490,12 +442,7 @@
                 this.loadnav(this.selectindex)
             },
             loop(){
-                // 只在交换机端口状态页面自动刷新
-                if(this.selectdata && this.selectdata.label=="交换机端口状态"){
-                    this.get('/setting.cgi?btntype='+this.selectdata.btntype,(s)=>this.render(s[1],this.selectdata,this.selectj))
-                }else{
                     this.loadcontent(this.selectj,this.selectdata)
-                }
             },
             labelhtml(i,style,label){
                 return [
@@ -589,14 +536,6 @@
                 var html="";
                 console.log('loadcontent',s,data,j)
                 for(var i=0;i<data.nodes.length;i++){
-                    // 交换机端口状态自定义一行渲染，按3个数据分别赋值
-                    if(data.label=="交换机端口状态" && data.nodes[i].length>=6 && s.length>=3*data.nodes.length){
-                        data.nodes[i][1]=s[i*3]+'';
-                        data.nodes[i][4]=s[i*3+1]+'';
-                        data.nodes[i][5]=s[i*3+2]+'';
-                        html+=this.rowhtml(data.nodes[i],j,i);
-                        continue;
-                    }
                     if(s[i]){
                         data.nodes[i][1]=s[i]+''
                     }
@@ -616,21 +555,6 @@
                     }
                 }
                 document.getElementById(data.divid).innerHTML=html
-            },
-            rowhtml(data, j, i) {
-                // 使用 .from 类来保持与 switch 行一致的间距和样式
-                var checked = data[3] && data[3].type == "switch" && data[1] == "1" ? "checked" : "";
-                return [
-                    '<div class="from">',
-                        '<span>', data[0], ':</span>',
-                        '<label class="switch">',
-                            '<input type="checkbox" ', checked, ' onchange="View.switchChange(', j, ',', i, ',3)">',
-                            '<div class="slider round"></div>',
-                        '</label>',
-                        '<input type="text" name="', data[4], '" value="', data[4] || '', '" placeholder="上行流量" style="width:70px; margin-left:20px;">',
-                        '<input type="text" name="', data[5], '" value="', data[5] || '', '" placeholder="下行流量" style="width:70px; margin-left:20px;">',
-                    '</div>'
-                ].join('');
             },
             loadcontent(j,data){
                 this.selectj=j
