@@ -76,7 +76,7 @@ static void tcp_client_thread(void *arg)
 					#if 1 // add by unclexu, 当被扫描断网时,重启lwip,不如重启系统
 						//lwipdev.init = 0;
 						//lwipdev.reset = 1;
-						System_SoftReset(); // 重启系统也很快,还能消除未知的隐患
+						app_system_softreset(); // 重启系统也很快,还能消除未知的隐患
 					#endif
 					break;
 				}

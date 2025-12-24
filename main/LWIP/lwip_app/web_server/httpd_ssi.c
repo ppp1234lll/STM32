@@ -149,15 +149,22 @@ void sim_status_Handler(char *pcInsert)
 }
 /************************************************************
 *
-* Function name	: bat_status_Handler
+* Function name	: light_status_Handler
 * Description	: bat ×´Ì¬
 * Parameter		: 
 * Return		: 
 *	
 ************************************************************/
-void bat_status_Handler(char *pcInsert)
+void light_status_Handler(char *pcInsert)
 {
-
+	uint8_t data = det_get_light_status();
+	switch(data)
+	{
+		case 0: sprintf(pcInsert,"%s",water_ssi_none);  break;
+		case 1: sprintf(pcInsert,"%s",cg_ssi_normal); 	  break;
+		case 2: sprintf(pcInsert,"%s",cg_ssi_error); break;
+		default:break;
+	}
 }
 
 /************************************************************
@@ -271,7 +278,7 @@ void httpd_ssi_other_data_collection_function(char *pcInsert)
 {
 	char buff[4][8] = {0};
 	char new_buff[4][7] = {0};
-	char new_buff1[5][30] = {0};
+	char new_buff1[4][30] = {0};
 	uint16_t data[2] = {0};
 	float    temp    = 0;
 	uint8_t  unit[] = {0xe2,0x84,0x83};
@@ -300,9 +307,9 @@ void httpd_ssi_other_data_collection_function(char *pcInsert)
 	open_door_status_Handler(new_buff[1]);				// ÏäÃÅ×´Ì¬
 	
 	spd_status_Handler(new_buff1[0]);
-	water_status_Handler(new_buff1[1]);
-	
-	Miu_Handler (new_buff1[2],4);
+	light_status_Handler(new_buff1[1]);
+	water_status_Handler(new_buff1[2]);
+	Miu_Handler (new_buff1[3],4);
 	
 	sprintf(pcInsert,"[\"%s%s\",\"%s%%\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"]",
 			buff[0],unit,buff[1],new_buff[0],new_buff[1],new_buff1[0],\

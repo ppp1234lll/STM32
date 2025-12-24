@@ -42,6 +42,8 @@ void start_system_init_function(void)
 //	BH1750_Init();                   // 光照度初始化(已测试)	
 	bl0910_init_function();						// 电能检测初始化(已测试)
 	bl0939_init_function();           // 电能检测初始化(失败)
+	bl0910_test();
+	
 	IWDG_Feed();
 	W25QXX_Init();			 					 // 初始化spiflash
 

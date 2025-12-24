@@ -42,6 +42,7 @@ void httpd_ssi_network_setting_function(char* pcInsert);  // 网络信息
 void httpd_ssi_other_setting_function(char *pcInsert);	  // 其他信息-摄像头ip
 void http_ssi_server_setting_function(char *pcInsert);	  // 远端服务器信息
 void httpd_ssi_threshold_seting_function(char *pcInsert); // 阈值 20230720
+void httpd_ssi_bd_data_collection_function(char *pcInsert);
 void httpd_ssi_power_data_collection_function(char *pcInsert); // 功率
 void httpd_ssi_other_data_collection_function(char *pcInsert); // 温湿度
 void httpd_ssi_volt_cur_data_collection_function(char *pcInsert); // 水浸

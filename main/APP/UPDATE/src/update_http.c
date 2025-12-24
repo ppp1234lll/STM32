@@ -1261,7 +1261,7 @@ void http_update_success_reboot(void)
 
 	lfs_unmount(&g_lfs_t);
 
-	System_SoftReset(); // 重启系统
+	app_system_softreset(); // 重启系统
 }
 ////////////////////
 

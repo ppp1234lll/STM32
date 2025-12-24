@@ -49,6 +49,9 @@ typedef struct
 		uint8_t current_protection;	  // 电流保护
 		uint8_t volt_protection;	  // 电压保护
 		uint8_t miu_protection;	  // 漏电
+		uint8_t mcb_status;	  // 空开前断电
+		uint8_t pe_status;	  // 缺地线
+		uint8_t ln_status;	  // 零火
 	} sys;
 	struct
 	{
@@ -452,6 +455,87 @@ void app_detection_collection_param(void)
 	}	
 #endif		
 
+	/* 空开模块 */
+#ifdef MCB_ENABLE  
+	if(det_get_front_ac220_value() < 50)
+	{
+		if((status_error & 0x0800) == 0) 
+		{
+			status_error  |= 0x0800;
+			status_normal &=~0x0800;
+			if(det_get_vin220v_handler(0) < 50) 
+			  sg_sysoperate_t.sys.mcb_status = 1;
+				
+			app_report_information_immediately();
+		}
+	} 
+	else 
+	{
+		if(det_get_vin220v_handler(0) > 100) 
+		{
+			if((status_normal & 0x0800) == 0) 
+			{
+				status_normal |= 0x0800;
+				status_error  &=~0x0800;
+				sg_sysoperate_t.sys.mcb_status = 2;	
+				app_report_information_immediately();
+			}
+		}
+		else
+			sg_sysoperate_t.sys.mcb_status = 0;	
+	}	
+#endif		
+	
+	if(det_get_vin220v_handler(0) > 50) 
+	{
+		if(det_get_lp_value() == 0)// 正常
+		{
+			if((status_normal & 0x1000) == 0)  
+			{
+				status_normal |= 0x1000;
+				status_error  &=~0x1000;
+				sg_sysoperate_t.sys.pe_status = 1;
+				app_report_information_immediately();				
+			}	
+			if((status_normal & 0x2000) == 0)  
+			{
+				status_normal |= 0x2000;
+				status_error  &=~0x2000;
+				sg_sysoperate_t.sys.ln_status = 1;
+				app_report_information_immediately();				
+			}	
+		}
+		else
+		{
+			if(det_get_np_value() == 1)  // 反接
+			{
+				if((status_normal & 0x1000) == 0)  
+				{
+					status_normal |= 0x1000;
+					status_error  &=~0x1000;
+					sg_sysoperate_t.sys.pe_status = 1;
+					app_report_information_immediately();				
+				}	
+				if((status_error & 0x2000) == 0)  
+				{
+					status_error  |= 0x2000;
+					status_normal &=~0x2000;
+					sg_sysoperate_t.sys.ln_status = 2;
+					app_report_information_immediately();				
+				}	
+			}
+			else  //缺地线
+			{
+				if((status_error & 0x1000) == 0)  
+				{
+					status_error |= 0x1000;
+					status_normal  &=~0x1000;
+					sg_sysoperate_t.sys.pe_status = 2;
+					app_report_information_immediately();				
+				}					
+			}	
+		}		
+	}
 }
 
 /************************************************************
@@ -2162,7 +2246,6 @@ uint8_t app_get_current_status(void)
 	return sg_sysoperate_t.sys.current_protection;
 }
 
-
 /************************************************************
 *
 * Function name	: app_get_miu_protec_status
@@ -2175,6 +2258,43 @@ uint8_t app_get_miu_protec_status(void)
 {
 	return sg_sysoperate_t.sys.miu_protection;
 }
+/************************************************************
+*
+* Function name	: app_get_pe_status
+* Description	: 获取地线
+* Parameter		: 
+* Return		: 
+*	
+************************************************************/
+uint8_t app_get_pe_status(void)
+{
+	return sg_sysoperate_t.sys.pe_status;
+}
+/************************************************************
+*
+* Function name	: app_get_ln_status
+* Description	: 获取linghuo
+* Parameter		: 
+* Return		: 
+*	
+************************************************************/
+uint8_t app_get_ln_status(void)
+{
+	return sg_sysoperate_t.sys.ln_status;
+}
+/************************************************************
+*
+* Function name	: app_get_mcb_status
+* Description	: 获取空开电压
+* Parameter		: 
+* Return		: 
+*	
+************************************************************/
+uint8_t app_get_mcb_status(void)
+{
+	return sg_sysoperate_t.sys.mcb_status;
+}
+
 /************************************************************
 *
 * Function name	: app_set_threshold_param_function

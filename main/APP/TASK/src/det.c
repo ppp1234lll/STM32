@@ -21,7 +21,7 @@ void det_task_function(void)
 		bl0910_work_process_function();	 // 数据获取函数
 		bl0939_work_process_function();
 		det_get_gps_value();             // 获取GPS数据
-		det_get_lux_function();          // 获取光照度
+//		det_get_lux_function();          // 获取光照度
 		IWDG_Feed();			 		           // 喂狗			
 		OSTimeDlyHMSM(0,0,0,10);  	 	   // 延时5ms
 	}
@@ -79,6 +79,16 @@ void det_get_key_status_function(void)
 		sg_datacollec_t.key_evnt[LIGHT_K11] = 2;	
 	else 
 		sg_datacollec_t.key_evnt[LIGHT_K11] = 1;		
+
+	if(sg_datacollec_t.key_s[AC_LP_K8] == KEY_EVNT)	 // 火地
+		sg_datacollec_t.key_evnt[AC_LP_K8] = 1;	
+	else 
+		sg_datacollec_t.key_evnt[AC_LP_K8] = 0;		
+
+	if(sg_datacollec_t.key_s[AC_NP_K9] == KEY_EVNT)	 // 零地
+		sg_datacollec_t.key_evnt[AC_NP_K9] = 1;	
+	else 
+		sg_datacollec_t.key_evnt[AC_NP_K9] = 0;			
 }
 
 /*
@@ -493,11 +503,11 @@ uint8_t det_get_main_network_sub_status(void)
 *	返 回 值: 无
 *********************************************************************************************************
 */
-void det_set_total_energy_bl0910(uint8_t num,float data)
+void det_set_total_energy_bl0910(uint8_t num,uint32_t data)
 {
 	switch(num)
 	{
-		case 0: sg_datacollec_t.vin220v = data / BL0910_VOLT_KP; 			break;
+		case 0: sg_datacollec_t.vin220v = data / BL0910_VOLT_KP; 			  break;
 		case 1: sg_datacollec_t.total_current = data / BL0910_CURR_KP; 	break;
 		case 2: sg_datacollec_t.current[0] = data / BL0910_CURR_KP; 		break;
 		case 3: sg_datacollec_t.current[1] = data / BL0910_CURR_KP; 		break;
@@ -507,15 +517,15 @@ void det_set_total_energy_bl0910(uint8_t num,float data)
 		case 7: sg_datacollec_t.current[5] = data / BL0910_CURR_KP; 		break;
 		case 8: sg_datacollec_t.current[6] = data / BL0910_CURR_KP; 		break;
 		case 9: sg_datacollec_t.current[7] = data / BL0910_CURR_KP; 		break;
-		case 10: sg_datacollec_t.power[0] = data / BL0910_POWER_KP;		break;
-		case 11: sg_datacollec_t.power[1] = data / BL0910_POWER_KP;		break;
-		case 12: sg_datacollec_t.power[2] = data / BL0910_POWER_KP;		break;
-		case 13: sg_datacollec_t.power[3] = data / BL0910_POWER_KP;		break;
-		case 14: sg_datacollec_t.power[4] = data / BL0910_POWER_KP;		break;
-		case 15: sg_datacollec_t.power[5] = data / BL0910_POWER_KP;		break;
-		case 16: sg_datacollec_t.power[6] = data / BL0910_POWER_KP;		break;
-		case 17: sg_datacollec_t.power[7] = data / BL0910_POWER_KP;		break;
-		case 18: sg_datacollec_t.total_power = data / BL0910_POWER_KP;break;
+		case 10:sg_datacollec_t.power[0] = Complement_2_Original(data) / BL0910_POWER_KP;	break;
+		case 11:sg_datacollec_t.power[1] = Complement_2_Original(data) / BL0910_POWER_KP;	break;
+		case 12:sg_datacollec_t.power[2] = Complement_2_Original(data) / BL0910_POWER_KP;	break;
+		case 13:sg_datacollec_t.power[3] = Complement_2_Original(data) / BL0910_POWER_KP;	break;
+		case 14:sg_datacollec_t.power[4] = Complement_2_Original(data) / BL0910_POWER_KP;	break;
+		case 15:sg_datacollec_t.power[5] = Complement_2_Original(data) / BL0910_POWER_KP;	break;
+		case 16:sg_datacollec_t.power[6] = Complement_2_Original(data) / BL0910_POWER_KP;	break;
+		case 17:sg_datacollec_t.power[7] = Complement_2_Original(data) / BL0910_POWER_KP;	break;
+		case 18:sg_datacollec_t.total_power = Complement_2_Original(data) / BL0910_POWER_KP;break;
 		case 19: sg_datacollec_t.kwh.electricity[0] = data * BL0910_ELEC_Ke;		break;
 		case 20: sg_datacollec_t.kwh.electricity[1] = data * BL0910_ELEC_Ke;		break;
 		case 21: sg_datacollec_t.kwh.electricity[2] = data * BL0910_ELEC_Ke;		break;
@@ -703,5 +713,77 @@ void det_get_lux_function(void)
 uint8_t det_get_miu_value(void)
 {
 	return sg_datacollec_t.residual_c;
+}
+/*
+*********************************************************************************************************
+*	函 数 名: det_get_front_ac220_value
+*	功能说明: 获取空开前电压
+*	形    参: 无
+*	返 回 值: 无
+*********************************************************************************************************
+*/
+uint8_t det_get_front_ac220_value(void)
+{
+	return sg_datacollec_t.QF_front_vin220v;
+}
+/*
+*********************************************************************************************************
+*	函 数 名: det_get_lp_value
+*	功能说明: 获取火地
+*	形    参: 无
+*	返 回 值: 无
+*********************************************************************************************************
+*/
+uint8_t det_get_lp_value(void)
+{
+	return sg_datacollec_t.key_evnt[AC_LP_K8];
+}
+/*
+*********************************************************************************************************
+*	函 数 名: det_get_np_value
+*	功能说明: 获取零地
+*	形    参: 无
+*	返 回 值: 无
+*********************************************************************************************************
+*/
+uint8_t det_get_np_value(void)
+{
+	return sg_datacollec_t.key_evnt[AC_NP_K9];
+}
+/*
+*********************************************************************************************************
+*	函 数 名: det_get_ln_value
+*	功能说明: 获取零火
+*	形    参: 无
+*	返 回 值: 无
+*********************************************************************************************************
+*/
+uint8_t det_get_ln_value(void)
+{
+	return sg_datacollec_t.ac220_ln;
+}
+/*
+*********************************************************************************************************
+*	函 数 名: Complement_2_Original
+*	功能说明: 补码转换为原码
+*	形    参: 无
+*	返 回 值: 无
+*********************************************************************************************************
+*/
+uint32_t Complement_2_Original(uint32_t data)
+{
+	uint32_t temp;
+	if((data&0x00800000) == 0x00800000)  // 判断最高位是否为0，Bit[23]为符号位，Bit[23]=0为正
+	{
+		data &= 0x007FFFFF;  // 清除符号位 	
+		temp =~data;         // 反码
+		data = temp & 0x007FFFFF;  // 清除左边多余位
+		data += 1;				
+	}
+	else  // 当前为负功
+	{
+		data &= 0x007FFFFF;  // 清除符号位
+	}
+	return data;
 }
 

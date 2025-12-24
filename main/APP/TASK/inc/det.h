@@ -39,7 +39,7 @@ typedef struct
 	
 	uint8_t key_s[11];    // 按键数量定义
 	uint8_t key_evnt[11];    // 按键事件
-	
+	uint8_t ac220_ln;    // 零火
 	float   QF_front_vin220v; // 空气开关前端220V电压检测
 	uint8_t residual_c;    // 剩余电流
 
@@ -69,7 +69,7 @@ void det_set_220v_in_function(uint8_t status); 			    // 设置市电状态
 void det_set_camera_status(uint8_t num,uint8_t status);		// 设置摄像机状态
 void det_set_main_network_status(uint8_t status);			// 设置主网络状态
 void det_set_main_network_sub_status(uint8_t status);		// 设置主网络状态 - 2
-void det_set_total_energy_bl0910(uint8_t num,float data);			// 设置电量参数
+void det_set_total_energy_bl0910(uint8_t num,uint32_t data);			// 设置电量参数
 void det_set_total_energy_bl0942(uint8_t num,float data);
 
 void det_set_total_energy_bl0939(uint8_t num,float data);
@@ -77,15 +77,15 @@ void det_set_ping_status(uint8_t status);
 void det_set_spd_status(uint8_t mode);   //  设置防雷开关状态
 void det_set_water_status(uint8_t mode);
 uint8_t det_get_light_status(void);
-
+uint8_t det_get_front_ac220_value(void);
 uint8_t det_get_open_door(void);							// 获取箱门状态
 uint16_t det_get_cabinet_posture(void);						// 获取箱体姿态
 
 uint8_t det_get_camera_status(uint8_t num);					// 获取摄像机状态
 uint8_t det_get_main_network_status(void);					// 获取主网络状态
 uint8_t det_get_main_network_sub_status(void);				// 获取主网络状态 - 2
-uint8_t det_get_spd_status(void);	   //  获取防雷开关状态
-uint8_t det_get_water_status(void);
+
+
 uint8_t det_get_miu_value(void);
 void *det_get_collect_data(void);
 void det_set_key_value(uint8_t key_id,uint8_t key_value);
@@ -97,6 +97,11 @@ uint8_t det_get_pwr_status(void);
 uint8_t det_get_door_status(void);
 uint8_t det_get_spd_status(void);
 uint8_t det_get_water_status(void);
+uint8_t det_get_lp_value(void);
+uint8_t det_get_np_value(void);	
+uint8_t det_get_ln_value(void);
+
+uint32_t Complement_2_Original(uint32_t data);
 
 
 #endif

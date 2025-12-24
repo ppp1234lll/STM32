@@ -6,7 +6,7 @@
 #define SAVE_DEVICE_PARAMETER_NAME  ("device_name")       /* 设备详细:id、名称、密码等 */
 #define SAVE_CAREMA_PARAMETER       ("carema_param")      /* 摄像头相关信息 */
 #define SAVE_COM_PARAMETER_NAME     ("comparameter")      /* 通信相关参数 */
-#define SAVE_HTTP_UPDATE_ADDR_NAME ("HTTP_OTA")    /* 更新地址 */
+#define SAVE_HTTP_UPDATE_ADDR_NAME ("HTTP_OTA")           /* 更新地址 */
 #define SAVE_THRESHOLD_PARAMETER    ("threshold_params")  /* 相关阈值：电压 电流 角度 */ // 20230720
 #define SAVE_UPDATE_FILE_INFOR_NAME ("upfileinfor.bin")   /* 更新文件信息 */
 

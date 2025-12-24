@@ -333,6 +333,23 @@ void com_report_normally_function(uint8_t *data, uint16_t *len, uint8_t cmd)
 	memset(str,0,sizeof(str));
 	sprintf((char*)str,"MIU=%d;",app_get_miu_protec_status());
 	strcat((char*)data,(char*)str);
+
+	/** 空开前断电 **/
+	memset(str,0,sizeof(str));
+	sprintf((char*)str,"MCB=%d;",app_get_mcb_status());
+	strcat((char*)data,(char*)str);
+	/** 地线 **/
+	memset(str,0,sizeof(str));
+	sprintf((char*)str,"PE=%d;",app_get_pe_status());
+	strcat((char*)data,(char*)str);
+	/** 零火 **/
+	memset(str,0,sizeof(str));
+	sprintf((char*)str,"LNR=%d;",app_get_ln_status());
+	strcat((char*)data,(char*)str);
+	/** 光敏 **/
+	memset(str,0,sizeof(str));
+	sprintf((char*)str,"LGT=%d;",det_get_light_status());
+	strcat((char*)data,(char*)str);
 	
 	/** 北斗定位信息只包含经纬度即可 */
 	atgm336h_data_t *gnss_data = atgm336h_get_gnss_data();

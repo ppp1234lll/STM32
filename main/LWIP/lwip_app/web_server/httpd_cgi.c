@@ -1046,7 +1046,8 @@ int8_t httpd_cgi_system_function(int iNumParams, char *pcParam[], char *pcValue[
 	if (strcmp(pcValue[0] , "reboot")==0)
 	{
 		set_return_status_function(0,(uint8_t*)"\"SUCCESS!\"");
-		set_reboot_time_function(1000);
+//		set_reboot_time_function(1000);
+		app_system_softreset();
 		return 0;
 	}
 	
@@ -1055,7 +1056,8 @@ int8_t httpd_cgi_system_function(int iNumParams, char *pcParam[], char *pcValue[
 	{
 		set_return_status_function(0,(uint8_t*)"\"SUCCESS!\"");
 		W25QXX_Erase_Chip();
-		set_reboot_time_function(1000);
+//		set_reboot_time_function(1000);
+		app_system_softreset();
 		return 0;
 	}
 
@@ -1113,6 +1115,12 @@ int8_t httpd_cgi_show_function(char *pcValue[], uint16_t *data, uint8_t *buff)
 		httpd_ssi_threshold_seting_function((char*)buff);
 		return 0;
 	}		
+	/* 北斗数据更新 */
+	if (strcmp(pcValue[0], "BeidouData") == 0) {  
+		*data = 0;
+		httpd_ssi_bd_data_collection_function((char*)buff);  // 收集北斗数据
+		return 0;
+	}
 	
 
 	if ( strcmp(pcValue[0] , "switchStatus")==0 ) {	/* 更新开关状态 */

@@ -143,31 +143,6 @@ void bl0910_send_over_function(void)
 
 /*
 *********************************************************************************************************
-*	函 数 名: Complement_2_Original
-*	功能说明: 补码转换为原码
-*	形    参: 无
-*	返 回 值: 无
-*********************************************************************************************************
-*/
-static uint32_t Complement_2_Original(uint32_t data)
-{
-	uint32_t temp;
-	if((data&0x00800000) == 0x00800000)  // 判断最高位是否为0，Bit[23]为符号位，Bit[23]=0为正
-	{
-		data &= 0x007FFFFF;  // 清除符号位 	
-		temp =~data;         // 反码
-		data = temp & 0x007FFFFF;  // 清除左边多余位
-		data += 1;				
-	}
-	else  // 当前为负功
-	{
-		data &= 0x007FFFFF;  // 清除符号位
-	}
-	return data;
-}
-
-/*
-*********************************************************************************************************
 *	函 数 名: bl0910_deal_read_data_function
 *	功能说明: 处理读取到的数据
 *	形    参: 无
@@ -205,15 +180,15 @@ int8_t bl0910_deal_read_data_function(void)
 		case BL0910_I7_RMS:    det_set_total_energy_bl0910(7,data); break;
 		case BL0910_I8_RMS:    det_set_total_energy_bl0910(8,data); break;
 		case BL0910_I9_RMS:    det_set_total_energy_bl0910(9,data); break;
-		case BL0910_WATT1_AP:  det_set_total_energy_bl0910(18,Complement_2_Original(data));	break;		
-		case BL0910_WATT2_AP:  det_set_total_energy_bl0910(10,Complement_2_Original(data)); break;		
-		case BL0910_WATT3_AP:  det_set_total_energy_bl0910(11,Complement_2_Original(data));	break;	
-		case BL0910_WATT4_AP:  det_set_total_energy_bl0910(12,Complement_2_Original(data));	break;		
-		case BL0910_WATT5_AP:  det_set_total_energy_bl0910(13,Complement_2_Original(data));	break;
-		case BL0910_WATT6_AP:  det_set_total_energy_bl0910(14,Complement_2_Original(data));	break;
-		case BL0910_WATT7_AP:  det_set_total_energy_bl0910(15,Complement_2_Original(data)); break;
-		case BL0910_WATT8_AP:  det_set_total_energy_bl0910(16,Complement_2_Original(data));	break;
-		case BL0910_WATT9_AP:  det_set_total_energy_bl0910(17,Complement_2_Original(data));	break;
+		case BL0910_WATT1_AP:  det_set_total_energy_bl0910(18,data);	break;		
+		case BL0910_WATT2_AP:  det_set_total_energy_bl0910(10,data); break;		
+		case BL0910_WATT3_AP:  det_set_total_energy_bl0910(11,data);	break;	
+		case BL0910_WATT4_AP:  det_set_total_energy_bl0910(12,data);	break;		
+		case BL0910_WATT5_AP:  det_set_total_energy_bl0910(13,data);	break;
+		case BL0910_WATT6_AP:  det_set_total_energy_bl0910(14,data);	break;
+		case BL0910_WATT7_AP:  det_set_total_energy_bl0910(15,data); break;
+		case BL0910_WATT8_AP:  det_set_total_energy_bl0910(16,data);	break;
+		case BL0910_WATT9_AP:  det_set_total_energy_bl0910(17,data);	break;
 		case BL0910_CF1_CNT:   det_set_total_energy_bl0910(27,data); break;
 		case BL0910_CF2_CNT:   det_set_total_energy_bl0910(19,data); break;
 		case BL0910_CF3_CNT:   det_set_total_energy_bl0910(20,data); break;

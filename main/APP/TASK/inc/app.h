@@ -252,4 +252,8 @@ void app_set_http_ota_function(struct update_addr param);
 
 void app_system_softreset(void);
 
+uint8_t app_get_mcb_status(void);
+uint8_t app_get_ln_status(void);
+uint8_t app_get_pe_status(void);
+
 #endif
