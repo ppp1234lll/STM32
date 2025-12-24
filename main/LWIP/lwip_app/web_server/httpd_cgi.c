@@ -292,12 +292,12 @@ static int8_t Setting_threshold_parameter_function(char *pcParam[], char *pcValu
 	}		
 	if (strcmp(pcParam[i] , "ah")==0) // 风扇停止湿度
 	{
-		param.humi_low = atoi(pcValue[i]);
+		param.humi_low = atoi(pcValue[i]);  return ret; 
 	}
 	if (strcmp(pcParam[i] , "ak")==0) // 箱门时间
 	{
-		setting_threshold_time(pcValue[i],0);
-		return ret; 
+		setting_threshold_time(pcValue[i],0);  return ret;
+		
 	}
 //	if (strcmp(pcParam[i] , "al")==0) // 补光灯时间
 //	{
@@ -306,9 +306,18 @@ static int8_t Setting_threshold_parameter_function(char *pcParam[], char *pcValu
 //	}
 	if (strcmp(pcParam[i] , "am")==0) // 漏电
 	{
-		param.miu = atoi(pcValue[i]);
+		param.miu = atoi(pcValue[i]); return ret;
+	}	
+	if (strcmp(pcParam[i] , "bc")==0) // 漏电
+	{
+		param.net_reload = atoi(pcValue[i]); return ret;
+	}	
+	if (strcmp(pcParam[i] , "bd")==0) // 漏电
+	{
+		param.net_retime = atoi(pcValue[i]);
 		app_set_threshold_param_function(param);
 	}	
+	
 	return ret;
 }
 

@@ -617,6 +617,9 @@ void save_read_default_threshold_parameter(struct threshold_params *param)
 	param->light_open_time  = DEFALUT_LIGHT_OPEN_TIME;
 	param->light_close_time = DEFALUT_LIGHT_CLOSE_TIME;
 	param->miu  	 		    = DEFAULT_MIU;
+	
+	param->net_reload     = 0;
+	param->net_retime     = 0;	
 }
 
 /************************************************************

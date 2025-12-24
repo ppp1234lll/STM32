@@ -326,7 +326,7 @@ void httpd_ssi_other_data_collection_function(char *pcInsert)
 ************************************************************/
 void httpd_ssi_threshold_seting_function(char *pcInsert)
 {
-	char buff[9][5]   = {0};
+	char buff[11][5]   = {0};
 	char times[2][15] = {0};
 	struct threshold_params *param = app_get_threshold_param_function();
 
@@ -339,12 +339,14 @@ void httpd_ssi_threshold_seting_function(char *pcInsert)
 	sprintf(buff[6],"%d",param->humi_high);
 	sprintf(buff[7],"%d",param->humi_low);
 	sprintf(buff[8],"%d",param->miu);
+	sprintf(buff[9],"%d",param->net_reload);
+	sprintf(buff[10],"%d",param->net_retime);
 	sprintf(times[0],"%02d:%02d-%02d:%02d",
                param->door_open_time/60,param->door_open_time%60,\
 		           param->door_close_time/60,param->door_close_time%60);
 	
-	sprintf(pcInsert,"[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"]",
-										buff[0],buff[1],buff[2],buff[3],buff[4],buff[5],buff[6],buff[7],times[0],buff[8]);
+	sprintf(pcInsert,"[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"]",
+										buff[0],buff[1],buff[2],buff[3],buff[4],buff[5],buff[6],buff[7],times[0],buff[8],buff[9],buff[10]);
 
 }
 /************************************************************

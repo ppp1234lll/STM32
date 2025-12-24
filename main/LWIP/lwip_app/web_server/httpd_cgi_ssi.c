@@ -29,7 +29,7 @@ const char* SETTING_CGI_Handler(int iIndex,int iNumParams,char *pcParam[],char *
 uint8_t g_return_t[300] =  {0};
 uint16_t g_return_flag  = 0;
 
-#define PPCTAGS_SIZE (53)
+#define PPCTAGS_SIZE (49)
 static const char *ppcTAGs[PPCTAGS_SIZE]=  //SSI的Tag
 {
 	"a", // 同步时间
@@ -77,12 +77,9 @@ static const char *ppcTAGs[PPCTAGS_SIZE]=  //SSI的Tag
 	"am", // 漏电
 	"ba", // 升级url 
 	"bb", // 升级端口 
-	"bd_num", 	//
-	"bd_signal",
-	"bd_status",
-	"bd_lon",
-	"bd_lat",
-	"bd_dir",
+	"bc", // 重启次数 
+	"bd", // 重启时间
+
 
   "Y",
 	"Z",

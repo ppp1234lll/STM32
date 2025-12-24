@@ -559,6 +559,16 @@ void com_query_configuration_function(uint8_t *pdata, uint16_t *len)
 	memset(temp,0,sizeof(temp));
 	sprintf(temp,"%d",comparam->onvif_time);
 	my_cjson_join_string_function(pdata,(uint8_t*)"smt",(uint8_t*)temp,1);
+
+	/* 重启次数  20220908*/  
+	memset(temp,0,sizeof(temp));
+	sprintf(temp,"%d",threshol->net_reload);
+	my_cjson_join_string_function(pdata,(uint8_t*)"lannum",(uint8_t*)temp,1);
+	
+	/* 重启时间  20220908*/  
+	memset(temp,0,sizeof(temp));
+	sprintf(temp,"%d",threshol->net_retime);
+	my_cjson_join_string_function(pdata,(uint8_t*)"lantime",(uint8_t*)temp,1);
 	
 	/* 更新结果 */  
 	memset(temp,0,sizeof(temp));

@@ -57,7 +57,10 @@ typedef struct
 	{
 		uint8_t lwip_reset;         // 网络重启标志
 		uint8_t adapter_reset;		  // 适配器-重启标志
-		uint8_t relay_reset[8];		   
+		uint8_t relay_reset[8];	
+
+    uint8_t net_reload_id[8];		// 网络设备重启
+    uint8_t net_reload_time[8];	// 网络设备重启计时	
 	} sys_flag;
 	struct
 	{
@@ -117,7 +120,7 @@ void app_task_function(void)
 		app_com_send_function();						// 通信发送
 		app_server_link_status_function();
 		app_open_exec_task_function();		
-//		app_sys_operate_relay();
+		app_sys_net_operate_relay();
 		get_time_cnt++;
 		if(get_time_cnt>100)
 		{
@@ -1142,34 +1145,50 @@ void app_sys_operate_timer_function(void)
 		}
 	}
 }
-
 /************************************************************
 *
-* Function name	: app_sys_operate_relay
-* Description	: 继电器重启
+* Function name	: app_set_net_operate_relay_id
+* Description	: 根据网络重启设置继电器重启
 * Parameter		: 
 * Return		: 
 *	
 ************************************************************/
-void app_sys_operate_relay(void)
+void app_set_net_operate_relay_id(uint8_t num)
+{
+	sg_sysoperate_t.sys_flag.net_reload_id[num] = 1;
+}
+/************************************************************
+*
+* Function name	: app_sys_net_operate_relay
+* Description	: 根据网络重启设置继电器重启
+* Parameter		: 
+* Return		: 
+*	
+************************************************************/
+void app_sys_net_operate_relay(void)
 {
 	static uint16_t relay_time[8] = {0};
 		
 	for(uint8_t i=0;i<8;i++)
 	{
-		if(sg_sysoperate_t.sys_flag.relay_reset[i] == 1)
+		if(sg_sysoperate_t.sys_flag.net_reload_id[i] == 1)
 		{
-			relay_control((RELAY_DEV)i,RELAY_OFF);
-			relay_time[i] = 10*100;
-			sg_sysoperate_t.sys_flag.relay_reset[i] = 2;
+			if(sg_sysparam_t.threshold.net_retime == 0)
+				sg_sysoperate_t.sys_flag.net_reload_id[i]	= 0;		
+			else
+			{
+				relay_time[i] = sg_sysparam_t.threshold.net_retime;
+				relay_control((RELAY_DEV)i,RELAY_OFF);
+				sg_sysoperate_t.sys_flag.net_reload_id[i] = 2;							
+			}
 		}
-		else if(sg_sysoperate_t.sys_flag.relay_reset[i] == 2)
+		else if(sg_sysoperate_t.sys_flag.net_reload_id[i] == 2)
 		{		
 			relay_time[i]--;
 			if(relay_time[i] == 0)
 			{		
 				relay_control((RELAY_DEV)i,RELAY_ON);
-				sg_sysoperate_t.sys_flag.relay_reset[i]	= 0;			
+				sg_sysoperate_t.sys_flag.net_reload_id[i]	= 0;			
 			}
 		}	
 	}
@@ -2314,6 +2333,9 @@ void app_set_threshold_param_function(struct threshold_params param)
 	sg_sysparam_t.threshold.humi_low = param.humi_low; 
 	sg_sysparam_t.threshold.temp_high = param.temp_high;
 	sg_sysparam_t.threshold.temp_low = param.temp_low; 
+	sg_sysparam_t.threshold.net_reload = param.net_reload;
+  sg_sysparam_t.threshold.net_retime = param.net_retime;	
+	
 	save_stroage_threshold_parameter(&sg_sysparam_t.threshold); 
 }
 /************************************************************

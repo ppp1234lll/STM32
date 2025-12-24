@@ -42,17 +42,11 @@ struct update_addr
 
 struct device_param
 {
-	union i_c  id;		  		// id
+	union i_c  id;		    // id
 	uint8_t  name[52];    // 设备名称
 	uint8_t  password[20]; // 设备密码
 	uint8_t  default_password; // 0-已修改过默认密码 1-未修改默认密码
 };
-
-#define FLAG_DOOR     ((uint8_t)0x01) 
-#define FLAG_SPD      ((uint8_t)0x02) 
-#define FLAG_SIM      ((uint8_t)0x04) 
-#define FLAG_BAT      ((uint8_t)0x08) 
-#define FLAG_WATER    ((uint8_t)0x10)
 
 typedef struct
 {
@@ -79,6 +73,8 @@ struct threshold_params {
 	uint16_t light_close_time;  // 补光灯时间
 	
 	uint16_t miu;         //漏电阈值
+	uint8_t net_reload; //重启次数
+	uint8_t net_retime; //重启时间
 };
 
 
@@ -236,7 +232,7 @@ void app_set_fan_param_function(int8_t *data);
 void app_set_vol_current_param(uint16_t *data);
 void app_send_data_task_function(void);
 void my_app_run_param_init(void);
-void app_sys_operate_relay(void);
+void app_sys_net_operate_relay(void);
 uint32_t app_get_device_reload_time(void);
 
 uint8_t app_get_update_status_function(void);
@@ -255,5 +251,6 @@ void app_system_softreset(void);
 uint8_t app_get_mcb_status(void);
 uint8_t app_get_ln_status(void);
 uint8_t app_get_pe_status(void);
+void app_set_net_operate_relay_id(uint8_t num);
 
 #endif
