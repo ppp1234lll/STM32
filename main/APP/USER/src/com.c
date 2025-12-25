@@ -1554,7 +1554,24 @@ void com_set_work_time(com_rec_data_t *buff,uint8_t mode)
 		app_set_fill_light_function(temp);
 	app_set_reply_parameters_function(buff->cmd,0x01);
 }
-
+/************************************************************
+*
+* Function name	: com_set_threshold_params_function
+* Description	: 设置阈值
+* Parameter		: 
+* Return		: 
+*	
+************************************************************/
+void com_set_network_reload(com_rec_data_t *buff)
+{	
+	uint16_t data[2]={0};
+	
+	data[0] = buff->buff[0]; // 1个字节
+	data[1] = buff->buff[1]; // 1个字节
+	
+	app_set_network_reload_param(data);	/* 存储 */
+	app_set_reply_parameters_function(buff->cmd,0x01);
+}
 
 /************************************************************
 *
@@ -1755,7 +1772,9 @@ int8_t com_deal_main_function(void)
 			case CONFIGURE_DOOR_TIME:		      // 设置箱门时间
 				com_set_work_time(&recdata_t,0);
 				break;	
-			
+			case CONFIGURE_NETWOR_RELOAD:  // 设置箱门时间
+				com_set_network_reload(&recdata_t);
+				break;				
 			
 			/* 查询指令 */
 			case CR_QUERY_CONFIG: 			// 查询设备当前参数设置 - 对应上传查询配置

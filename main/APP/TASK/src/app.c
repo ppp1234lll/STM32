@@ -6,7 +6,7 @@
 #define SEND_STATUS_RESULT  (2) // 当前发送有了结果
 
 #define SERVER_LINK_TIME    (30000) // 服务器连接时间  5min = 30000ms/10ms
-
+#define NETWAOK_RELOAD_TIME   10
 typedef struct
 {
 	struct
@@ -60,7 +60,8 @@ typedef struct
 		uint8_t relay_reset[8];	
 
     uint8_t net_reload_id[8];		// 网络设备重启
-    uint8_t net_reload_time[8];	// 网络设备重启计时	
+    uint8_t net_reload_num[8];	// 网络设备重启次数	
+    uint8_t net_reload_times[8];	// 网络设备重启计时	
 	} sys_flag;
 	struct
 	{
@@ -120,7 +121,7 @@ void app_task_function(void)
 		app_com_send_function();						// 通信发送
 		app_server_link_status_function();
 		app_open_exec_task_function();		
-		app_sys_net_operate_relay();
+//		app_sys_net_operate_relay();
 		get_time_cnt++;
 		if(get_time_cnt>100)
 		{
@@ -493,13 +494,26 @@ void app_detection_collection_param(void)
 	{
 		if(det_get_lp_value() == 0)// 正常
 		{
-			if((status_normal & 0x1000) == 0)  
+			if(det_get_np_value() == 1)  //缺地线
+			{			
+				if((status_error & 0x1000) == 0)  
+				{
+					status_error |= 0x1000;
+					status_normal  &=~0x1000;
+					sg_sysoperate_t.sys.pe_status = 2;
+					app_report_information_immediately();				
+				}				
+			}
+			else
 			{
-				status_normal |= 0x1000;
-				status_error  &=~0x1000;
-				sg_sysoperate_t.sys.pe_status = 1;
-				app_report_information_immediately();				
-			}	
+				if((status_normal & 0x1000) == 0)  
+				{
+					status_normal |= 0x1000;
+					status_error  &=~0x1000;
+					sg_sysoperate_t.sys.pe_status = 1;
+					app_report_information_immediately();				
+				}	
+			}
 			if((status_normal & 0x2000) == 0)  
 			{
 				status_normal |= 0x2000;
@@ -527,16 +541,6 @@ void app_detection_collection_param(void)
 					app_report_information_immediately();				
 				}	
 			}
-			else  //缺地线
-			{
-				if((status_error & 0x1000) == 0)  
-				{
-					status_error |= 0x1000;
-					status_normal  &=~0x1000;
-					sg_sysoperate_t.sys.pe_status = 2;
-					app_report_information_immediately();				
-				}					
-			}	
 		}		
 	}
 }
@@ -1159,6 +1163,27 @@ void app_set_net_operate_relay_id(uint8_t num)
 }
 /************************************************************
 *
+* Function name	: app_set_net_reload_num
+* Description	: 根据网络重启设置继电器重启
+* Parameter		: 
+* Return		: 
+*	
+************************************************************/
+void app_set_net_reload_num(uint8_t num)
+{
+	if(sg_sysoperate_t.sys_flag.net_reload_num[num] == 0)
+	{
+		if(sg_sysparam_t.threshold.net_reload > 0)
+		{
+			sg_sysoperate_t.sys_flag.net_reload_num[num] = sg_sysparam_t.threshold.net_reload-1;
+			sg_sysoperate_t.sys_flag.net_reload_id[num] = 1;	
+		}
+		else
+			sg_sysoperate_t.sys_flag.net_reload_times[num] = 0;
+	}
+}
+/************************************************************
+*
 * Function name	: app_sys_net_operate_relay
 * Description	: 根据网络重启设置继电器重启
 * Parameter		: 
@@ -1189,11 +1214,57 @@ void app_sys_net_operate_relay(void)
 			{		
 				relay_control((RELAY_DEV)i,RELAY_ON);
 				sg_sysoperate_t.sys_flag.net_reload_id[i]	= 0;			
+        sg_sysoperate_t.sys_flag.net_reload_times[i] = NETWAOK_RELOAD_TIME;
 			}
 		}	
 	}
 }
-
+/************************************************************
+*
+* Function name	: app_sys_net_relay_reload_num_times
+* Description	: 重启次数计时
+* Parameter		: 
+* Return		: 
+*	
+************************************************************/
+void app_sys_net_relay_reload_num_times(void)
+{
+	for(uint8_t i=0;i<8;i++)
+	{
+		if(sg_sysoperate_t.sys_flag.net_reload_times[i] > 0) // 下一轮计时
+		{
+			sg_sysoperate_t.sys_flag.net_reload_times[i]--;
+			if(sg_sysoperate_t.sys_flag.net_reload_times[i] == 0)
+			{
+				if(sg_sysoperate_t.sys_flag.net_reload_num[i] > 0) 
+				{
+					sg_sysoperate_t.sys_flag.net_reload_num[i]--;
+					sg_sysoperate_t.sys_flag.net_reload_id[i] = 1;
+				}
+				else
+					sg_sysoperate_t.sys_flag.net_reload_times[i] = 0;
+			}
+		}
+		
+		
+		
+		
+//		if(sg_sysoperate_t.sys_flag.net_reload_num[i] > 0)  // 时间计数
+//		{
+//			sg_sysoperate_t.sys_flag.net_reload_num[i]--;
+//			if(sg_sysoperate_t.sys_flag.net_reload_num[i] == 0)
+//			{
+//				if(sg_sysoperate_t.sys_flag.net_reload_num[i] > 0)
+//				{
+//					sg_sysoperate_t.sys_flag.net_reload_num[i]--;
+//					sg_sysoperate_t.sys_flag.net_reload_id[i] = 1;
+//				}
+//				else
+//					sg_sysoperate_t.sys_flag.net_reload_num[i] = 0;
+//			}
+//		}
+	}
+}
 /***********************************************************************************
 					参数的配置与获取
 ***********************************************************************************/
@@ -1658,6 +1729,22 @@ void app_set_vol_current_param(uint16_t *data)
 	sg_sysparam_t.threshold.angle    = data[3];
 	sg_sysparam_t.threshold.miu      = data[4];
 	/* 保存 */
+	app_set_save_infor_function(SAVE_THRESHOLD);	/* 存储 */
+}
+
+/************************************************************
+*
+* Function name	: app_set_network_reload_param
+* Description	: 配置阈值
+* Parameter		: 
+* Return		: 
+*	
+************************************************************/
+void app_set_network_reload_param(uint16_t *data)
+{
+	sg_sysparam_t.threshold.net_reload = data[0];
+	sg_sysparam_t.threshold.net_retime = data[1];
+
 	app_set_save_infor_function(SAVE_THRESHOLD);	/* 存储 */
 }
 /************************************************************

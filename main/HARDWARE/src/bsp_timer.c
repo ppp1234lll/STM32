@@ -153,6 +153,8 @@ void TIM6_DAC_IRQHandler(void)
 //			time6_count =0;
 //			printf("time6 test\n");
 //		}	
+		app_sys_net_relay_reload_num_times();
+		app_sys_net_operate_relay();
 		TIM_ClearITPendingBit(TIM6,TIM_IT_Update);//Çå¿ÕÖÐ¶Ï×´Ì¬
 	}
 } 

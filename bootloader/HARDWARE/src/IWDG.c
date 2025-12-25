@@ -1,7 +1,7 @@
 #include "iwdg.h"
 
-#define SOFT_IWDG_ENABLE  0  // 软件看门狗
-#define HARD_IWDG_ENABLE  0  // 硬件看门狗
+#define SOFT_IWDG_ENABLE  1  // 软件看门狗
+#define HARD_IWDG_ENABLE  1  // 硬件看门狗
 
 /*
 *********************************************************************************************************

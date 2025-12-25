@@ -111,6 +111,10 @@ uint8_t det_main_network_and_camera_network(void)
 		if(main_ip[0] == 1 || main_ip[1] == 1) {
 			main_ip[0] = sg_datacollec_t.main_ip;
 			main_ip[1] = sg_datacollec_t.main_sub_ip;
+			
+			// ÷ÿ∆Ù…Ë±∏
+			app_set_net_reload_num(0);
+			app_set_net_reload_num(1);					
 			return 1;
 		}
 	}
@@ -128,6 +132,7 @@ uint8_t det_main_network_and_camera_network(void)
 			camera[3] = sg_datacollec_t.camera[3];
 			camera[4] = sg_datacollec_t.camera[4];
 			camera[5] = sg_datacollec_t.camera[5];
+			app_set_net_reload_num(i+2);		
 			return 1;
 		}
 	}

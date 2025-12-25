@@ -240,7 +240,7 @@ void app_set_update_status_function(uint8_t flag);
 
 void app_set_fill_light_function(uint16_t *time);
 void app_set_door_time_function(uint16_t *time);
-
+void app_set_network_reload_param(uint16_t *data);
 
 // ¸üÐÂµØÖ· 20241101
 void *app_get_http_ota_function(void);
@@ -252,5 +252,8 @@ uint8_t app_get_mcb_status(void);
 uint8_t app_get_ln_status(void);
 uint8_t app_get_pe_status(void);
 void app_set_net_operate_relay_id(uint8_t num);
+
+void app_sys_net_relay_reload_num_times(void);
+void app_set_net_reload_num(uint8_t num);
 
 #endif

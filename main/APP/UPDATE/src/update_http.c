@@ -526,6 +526,8 @@ static int http_update_chack_version(void)
 {
 	char *str, *pt1, *pt2, *http_body = NULL;
 	int ret = 0, version_str_len = 0, url_len = 0;
+	char dev_string[50]= {0};
+	sprintf(dev_string,"%s-%s",HARD_NO_STR,SOFT_NO_STR);
 	////
 
 	// http应答码
@@ -573,7 +575,7 @@ static int http_update_chack_version(void)
 	memcpy(sg_http_update_param.update_url, pt1, url_len);
 
 	// 比较版本号
-	ret = strcmp(SOFT_NO_STR, sg_http_update_param.update_version);
+	ret = strcmp(dev_string, sg_http_update_param.update_version);
 	if(ret){ return(1); }
 	else if(!ret){ return(2); }
 

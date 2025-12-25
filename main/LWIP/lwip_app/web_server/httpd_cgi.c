@@ -1082,6 +1082,43 @@ int8_t httpd_cgi_system_function(int iNumParams, char *pcParam[], char *pcValue[
 		set_return_status_function(0,(uint8_t*)"[\"root\",\" \"]");
 		return 0;
 	}
+	// ≤‚ ‘”√
+	if ( strcmp(pcValue[0] , "reset12")==0 ) {
+		set_return_status_function(0,(uint8_t*)"\"SUCCESS!\"");
+			app_set_net_reload_num(0);
+			app_set_net_reload_num(1);		
+		return 0;
+	}
+	if ( strcmp(pcValue[0] , "reset3")==0 ) {
+		set_return_status_function(0,(uint8_t*)"\"SUCCESS!\"");
+			app_set_net_reload_num(2);		
+		return 0;
+	}	
+	if ( strcmp(pcValue[0] , "reset4")==0 ) {
+		set_return_status_function(0,(uint8_t*)"\"SUCCESS!\"");
+			app_set_net_reload_num(3);		
+		return 0;
+	}
+	if ( strcmp(pcValue[0] , "reset5")==0 ) {
+		set_return_status_function(0,(uint8_t*)"\"SUCCESS!\"");
+			app_set_net_reload_num(4);	
+		return 0;
+	}
+	if ( strcmp(pcValue[0] , "reset6")==0 ) {
+		set_return_status_function(0,(uint8_t*)"\"SUCCESS!\"");
+			app_set_net_reload_num(5);	
+		return 0;
+	}
+	if ( strcmp(pcValue[0] , "reset7")==0 ) {
+		set_return_status_function(0,(uint8_t*)"\"SUCCESS!\"");
+			app_set_net_reload_num(6);
+		return 0;
+	}
+	if ( strcmp(pcValue[0] , "reset8")==0 ) {
+		set_return_status_function(0,(uint8_t*)"\"SUCCESS!\"");
+			app_set_net_reload_num(7);	
+		return 0;
+	}	
 	return -1;
 }
 

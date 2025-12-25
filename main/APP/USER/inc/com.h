@@ -21,6 +21,7 @@
 #define CONFIGURE_NETWORK_DELAY             (0xFE) // 配置网络延时时间		  20220308
 #define COM_HEART_UPDATA                    (0xFF) // 心跳上传
 
+#define CONFIGURE_NETWOR_RELOAD             (0xAD) // 配置网络传输设备电源
 #define CONFIGURE_DOOR_TIME                 (0xAC) // 配置箱门时间段
 #define CONFIGURE_RELOAD_TIME               (0xAB) // 设备重启时间
 #define CONFIGURE_HTTP_FILE_URL             (0xAA) // 设备升级地址
@@ -158,5 +159,6 @@ void com_deal_fan_temp_parmaeter(com_rec_data_t *buff);
 void com_deal_fan_humi_param(com_rec_data_t *buff);
 
 void com_set_work_time(com_rec_data_t *buff,uint8_t mode);  // 补光灯时间
+void com_set_network_reload(com_rec_data_t *buff);
 
 #endif

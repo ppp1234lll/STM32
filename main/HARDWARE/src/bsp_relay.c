@@ -12,14 +12,14 @@
 			 ¼ÌµçÆ÷7£º    PE14
 			 ¼ÌµçÆ÷8£º    PE15		
 */
-#define RELAY1_CTRL   PEout(15)
-#define RELAY2_CTRL   PEout(14)
-#define RELAY3_CTRL   PEout(13)
-#define RELAY4_CTRL   PEout(12)
-#define RELAY5_CTRL   PEout(11)
-#define RELAY6_CTRL   PEout(10)
-#define RELAY7_CTRL   PEout(9)
-#define RELAY8_CTRL   PEout(8)
+#define RELAY1_CTRL   PEout(8)
+#define RELAY2_CTRL   PEout(9)
+#define RELAY3_CTRL   PEout(10)
+#define RELAY4_CTRL   PEout(11)
+#define RELAY5_CTRL   PEout(12)
+#define RELAY6_CTRL   PEout(13)
+#define RELAY7_CTRL   PEout(14)
+#define RELAY8_CTRL   PEout(15)
 
 typedef struct
 {
